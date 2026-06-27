@@ -15,6 +15,7 @@ function App() {
   const [renters, setRenters] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isDbConnected, setIsDbConnected] = useState(true);
   
   // Modal toggles
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -32,12 +33,20 @@ function App() {
   const fetchRenters = async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/renters`);
+      if (response.status === 503) {
+        setIsDbConnected(false);
+        const data = await response.json();
+        throw new Error(data.message || 'Database connection is offline');
+      }
       if (!response.ok) throw new Error('Failed to fetch renters database');
       const data = await response.json();
       setRenters(data);
+      setIsDbConnected(true);
+      setErrorMsg('');
     } catch (error) {
       console.error(error);
-      setErrorMsg('Could not connect to database server. Make sure backend is running.');
+      setIsDbConnected(false);
+      setErrorMsg(error.message || 'Could not connect to database server. Make sure backend is running.');
     }
   };
 
@@ -171,6 +180,33 @@ function App() {
     };
   };
 
+  if (!isDbConnected) {
+    return (
+      <div className="app-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh', justifyContent: 'center', alignItems: 'center' }}>
+        <nav className="navbar glass-panel" style={{ width: '100%', maxWidth: '800px', marginBottom: '2rem' }}>
+          <div className="logo-container">
+            <div className="logo-icon">🔑</div>
+            <span className="logo-text">SPN rent management</span>
+          </div>
+        </nav>
+        <div className="glass-panel" style={{ padding: '3rem 2rem', maxWidth: '600px', width: '100%', textAlign: 'center', borderLeft: '4px solid var(--danger)' }}>
+          <div style={{ background: 'rgba(239, 68, 68, 0.1)', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: 'var(--danger)' }}>
+            <AlertCircle size={32} />
+          </div>
+          <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem', fontFamily: 'var(--font-display)' }}>Database Offline</h2>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', lineHeight: '1.6' }}>
+            We could not establish a connection to the MongoDB Atlas cluster. Please make sure that your internet connection is active, your MONGODB_URI connection string is correct, and your IP address is whitelisted in your MongoDB Atlas project settings.
+          </p>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <button className="btn btn-primary" onClick={fetchRenters}>
+              🔄 Retry Connection
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app-container">
       {/* Top Navbar */}
@@ -227,7 +263,7 @@ function App() {
               <span>Revenue Collected</span>
               <div className="stat-icon" style={{ color: 'var(--primary)', background: 'rgba(16, 185, 129, 0.1)' }}><DollarSign size={18} /></div>
             </div>
-            <div className="stat-value" style={{ color: 'var(--primary)' }}>${totalRevenueCollected.toFixed(2)}</div>
+            <div className="stat-value" style={{ color: 'var(--primary)' }}>₹{totalRevenueCollected.toFixed(2)}</div>
             <div className="stat-footer">Aggregated total paid</div>
           </div>
         )}
@@ -238,7 +274,7 @@ function App() {
               <span>Outstanding Balance</span>
               <div className="stat-icon" style={{ color: 'var(--warning)', background: 'rgba(245, 158, 11, 0.1)' }}><AlertCircle size={18} /></div>
             </div>
-            <div className="stat-value" style={{ color: 'var(--warning)' }}>${totalOutstandingDues.toFixed(2)}</div>
+            <div className="stat-value" style={{ color: 'var(--warning)' }}>₹{totalOutstandingDues.toFixed(2)}</div>
             <div className="stat-footer">Rent + Electricity due</div>
           </div>
         )}
@@ -319,9 +355,9 @@ function App() {
                         </div>
                       </td>
                       <td>
-                        <div style={{ fontWeight: '500' }}>Rent: ${renter.baseRent}/mo</div>
+                        <div style={{ fontWeight: '500' }}>Rent: ₹{renter.baseRent}/mo</div>
                         <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                          Elec: ${renter.electricityRate}/unit
+                          Elec: ₹{renter.electricityRate}/unit
                         </div>
                       </td>
                       <td>
@@ -335,7 +371,7 @@ function App() {
                       <td>
                         <div>
                           <span className={`badge ${outstanding > 0 ? 'badge-danger' : 'badge-success'}`}>
-                            {outstanding > 0 ? `Dues: $${outstanding.toFixed(2)}` : 'Fully Paid'}
+                            {outstanding > 0 ? `Dues: ₹${outstanding.toFixed(2)}` : 'Fully Paid'}
                           </span>
                         </div>
                       </td>

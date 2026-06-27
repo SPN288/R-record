@@ -156,7 +156,7 @@ const BillForm = ({ renter, onClose, onBillSaved, backendUrl }) => {
         </h3>
         
         <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-          Renter: <strong style={{ color: 'var(--text-primary)' }}>{renter?.name}</strong> (Rate: ${renter?.electricityRate}/unit)
+          Renter: <strong style={{ color: 'var(--text-primary)' }}>{renter?.name}</strong> (Rate: ₹{renter?.electricityRate}/unit)
         </p>
 
         {error && (
@@ -246,7 +246,7 @@ const BillForm = ({ renter, onClose, onBillSaved, backendUrl }) => {
 
           <div className="form-row">
             <div className="form-group">
-              <label className="form-label" htmlFor="rent-due">Monthly Rent Due ($)</label>
+              <label className="form-label" htmlFor="rent-due">Monthly Rent Due (₹)</label>
               <div style={{ position: 'relative' }}>
                 <DollarSign size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
                 <input
@@ -263,7 +263,7 @@ const BillForm = ({ renter, onClose, onBillSaved, backendUrl }) => {
             </div>
 
             <div className="form-group">
-              <label className="form-label" htmlFor="amount-paid">Amount Paid ($)</label>
+              <label className="form-label" htmlFor="amount-paid">Amount Paid (₹)</label>
               <div style={{ position: 'relative' }}>
                 <DollarSign size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
                 <input
@@ -286,25 +286,25 @@ const BillForm = ({ renter, onClose, onBillSaved, backendUrl }) => {
               <span>{unitsConsumed.toFixed(1)} units ({last} to {current})</span>
             </div>
             <div className="form-summary-row">
-              <span>Electricity Cost ({renter?.electricityRate}/unit):</span>
-              <span>${electricityBill.toFixed(2)}</span>
+              <span>Electricity Cost (₹{renter?.electricityRate}/unit):</span>
+              <span>₹{electricityBill.toFixed(2)}</span>
             </div>
             <div className="form-summary-row">
               <span>Monthly Rent:</span>
-              <span>${rent.toFixed(2)}</span>
+              <span>₹{rent.toFixed(2)}</span>
             </div>
             <div className="form-summary-row" style={{ color: 'var(--text-primary)', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
               <span>Total Dues for Month:</span>
-              <span>${totalDue.toFixed(2)}</span>
+              <span>₹{totalDue.toFixed(2)}</span>
             </div>
             <div className="form-summary-row" style={{ color: 'var(--primary)' }}>
               <span>Amount Paid:</span>
-              <span>-${paid.toFixed(2)}</span>
+              <span>-₹{paid.toFixed(2)}</span>
             </div>
             <div className="form-summary-row" style={{ fontSize: '1.05rem', borderTop: '2px solid var(--glass-border)', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
               <span>Remaining Balance:</span>
               <span style={{ color: balance > 0 ? 'var(--warning)' : balance < 0 ? 'var(--primary)' : 'var(--text-primary)' }}>
-                {balance >= 0 ? `$${balance.toFixed(2)}` : `Refund $${Math.abs(balance).toFixed(2)}`}
+                {balance >= 0 ? `₹${balance.toFixed(2)}` : `Refund ₹${Math.abs(balance).toFixed(2)}`}
               </span>
             </div>
           </div>

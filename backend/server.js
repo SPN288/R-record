@@ -15,15 +15,49 @@ app.use(cors({
 
 app.use(express.json());
 
-// MongoDB connection
-const mongoURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/rent_management';
+// Database status variable
+let dbConnected = false;
 
-mongoose.connect(mongoURI)
-  .then(() => console.log('Successfully connected to MongoDB.'))
-  .catch(err => {
-    console.error('MongoDB connection error:', err.message);
-    console.log('Using connection string:', mongoURI);
-  });
+// MongoDB connection
+const mongoURI = process.env.MONGODB_URI;
+
+if (!mongoURI) {
+  console.error('================================================================');
+  console.error('FATAL ERROR: MONGODB_URI is not defined in the environment!');
+  console.error('Please configure your MongoDB Atlas connection string in .env');
+  console.error('================================================================');
+} else {
+  mongoose.connect(mongoURI)
+    .then(() => {
+      dbConnected = true;
+      console.log('Successfully connected to MongoDB Atlas.');
+    })
+    .catch(err => {
+      dbConnected = false;
+      console.error('MongoDB Atlas connection error:', err.message);
+    });
+}
+
+// Monitor mongoose connection status events dynamically
+mongoose.connection.on('connected', () => { dbConnected = true; });
+mongoose.connection.on('disconnected', () => { dbConnected = false; });
+mongoose.connection.on('error', () => { dbConnected = false; });
+
+// Middleware to check database connection status
+app.use((req, res, next) => {
+  if (req.path === '/api/health') {
+    return next();
+  }
+  if (!dbConnected) {
+    return res.status(503).json({ message: 'Database connection is offline' });
+  }
+  next();
+});
+
+// Health check route
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', database: dbConnected ? 'connected' : 'disconnected' });
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));

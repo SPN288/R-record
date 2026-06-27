@@ -53,8 +53,8 @@ const RenterHistory = ({ renter, onClose }) => {
 
         <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '1.5rem' }}>
           <span>Phone: <strong style={{ color: 'var(--text-primary)' }}>{renter.contactNumber}</strong></span>
-          <span>Monthly Rent: <strong style={{ color: 'var(--text-primary)' }}>${renter.baseRent}</strong></span>
-          <span>Elec. Rate: <strong style={{ color: 'var(--text-primary)' }}>${renter.electricityRate}/unit</strong></span>
+          <span>Monthly Rent: <strong style={{ color: 'var(--text-primary)' }}>₹{renter.baseRent}</strong></span>
+          <span>Elec. Rate: <strong style={{ color: 'var(--text-primary)' }}>₹{renter.electricityRate}/unit</strong></span>
           <span>Current Meter Reading: <strong style={{ color: 'var(--text-primary)' }}>{currentReading}</strong></span>
         </div>
 
@@ -75,7 +75,7 @@ const RenterHistory = ({ renter, onClose }) => {
               fontFamily: 'var(--font-display)',
               color: totalOutstanding > 0 ? 'var(--warning)' : 'var(--success)'
             }}>
-              ${totalOutstanding.toFixed(2)}
+              ₹{totalOutstanding.toFixed(2)}
             </div>
           </div>
         </div>
@@ -106,9 +106,9 @@ const RenterHistory = ({ renter, onClose }) => {
                 <tr>
                   <th style={{ padding: '0.75rem 1rem' }}>Month</th>
                   <th style={{ padding: '0.75rem 1rem' }}>Electricity Details</th>
-                  <th style={{ padding: '0.75rem 1rem' }}>Charges ($)</th>
-                  <th style={{ padding: '0.75rem 1rem' }}>Paid ($)</th>
-                  <th style={{ padding: '0.75rem 1rem' }}>Balance ($)</th>
+                  <th style={{ padding: '0.75rem 1rem' }}>Charges (₹)</th>
+                  <th style={{ padding: '0.75rem 1rem' }}>Paid (₹)</th>
+                  <th style={{ padding: '0.75rem 1rem' }}>Balance (₹)</th>
                 </tr>
               </thead>
               <tbody>
@@ -124,15 +124,15 @@ const RenterHistory = ({ renter, onClose }) => {
                         <div style={{ fontSize: '0.75rem' }}>({bill.lastReading} → {bill.currentReading})</div>
                       </td>
                       <td style={{ padding: '0.75rem 1rem' }}>
-                        <div>Rent: ${bill.rentDue.toFixed(2)}</div>
-                        <div>Elec: ${bill.electricityBillDue.toFixed(2)}</div>
+                        <div>Rent: ₹{bill.rentDue.toFixed(2)}</div>
+                        <div>Elec: ₹{bill.electricityBillDue.toFixed(2)}</div>
                         <div style={{ fontWeight: '600', borderTop: '1px solid rgba(255,255,255,0.05)', marginTop: '0.25rem', paddingTop: '0.25rem' }}>
-                          Total: ${bill.totalDue.toFixed(2)}
+                          Total: ₹{bill.totalDue.toFixed(2)}
                         </div>
                       </td>
                       <td style={{ padding: '0.75rem 1rem', verticalAlign: 'middle' }}>
                         <div style={{ color: 'var(--primary)', fontWeight: '600' }}>
-                          ${bill.amountPaid.toFixed(2)}
+                          ₹{bill.amountPaid.toFixed(2)}
                         </div>
                         {bill.paymentDate && (
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -149,7 +149,7 @@ const RenterHistory = ({ renter, onClose }) => {
                           fontWeight: '600',
                           color: bill.balance > 0 ? 'var(--warning)' : bill.balance < 0 ? 'var(--primary)' : 'var(--text-secondary)'
                         }}>
-                          ${bill.balance.toFixed(2)}
+                          ₹{bill.balance.toFixed(2)}
                         </span>
                       </td>
                     </tr>

@@ -78,9 +78,9 @@ export const generatePDFReport = (renters) => {
   doc.setTextColor(15, 23, 42);
   doc.text(`${totalRenters}`, margin + 5, 57);
   doc.setTextColor(16, 185, 129); // green for revenue
-  doc.text(`$${totalRevenueCollected.toFixed(2)}`, margin + 45, 57);
+  doc.text(`Rs. ${totalRevenueCollected.toFixed(2)}`, margin + 45, 57);
   doc.setTextColor(239, 68, 68); // red for dues
-  doc.text(`$${totalOutstandingDues.toFixed(2)}`, margin + 95, 57);
+  doc.text(`Rs. ${totalOutstandingDues.toFixed(2)}`, margin + 95, 57);
   doc.setTextColor(6, 182, 212); // blue for electric
   doc.text(`${totalElectricityUsage.toFixed(1)} units`, margin + 145, 57);
 
@@ -110,17 +110,17 @@ export const generatePDFReport = (renters) => {
     doc.setFont('Helvetica', 'normal');
     doc.setFontSize(9);
     doc.setTextColor(100, 116, 139);
-    doc.text(`Contact: ${renter.contactNumber}  |  Base Rent: $${renter.baseRent}/mo  |  Electricity Rate: $${renter.electricityRate}/unit`, margin, currentY + 5);
+    doc.text(`Contact: ${renter.contactNumber}  |  Base Rent: Rs. ${renter.baseRent}/mo  |  Electricity Rate: Rs. ${renter.electricityRate}/unit`, margin, currentY + 5);
 
     // Calculate renter's outstanding dues
     const outstanding = renter.bills ? renter.bills.reduce((sum, b) => sum + b.balance, 0) : 0;
     doc.setFont('Helvetica', 'bold');
     if (outstanding > 0) {
       doc.setTextColor(239, 68, 68);
-      doc.text(`Outstanding Balance: $${outstanding.toFixed(2)}`, pageWidth - margin - 60, currentY);
+      doc.text(`Outstanding Balance: Rs. ${outstanding.toFixed(2)}`, pageWidth - margin - 60, currentY);
     } else {
       doc.setTextColor(16, 185, 129);
-      doc.text(`Outstanding Balance: $0.00 (Fully Paid)`, pageWidth - margin - 65, currentY);
+      doc.text(`Outstanding Balance: Rs. 0.00 (Fully Paid)`, pageWidth - margin - 65, currentY);
     }
 
     currentY += 10;
@@ -133,11 +133,11 @@ export const generatePDFReport = (renters) => {
           return [
             bill.month,
             `${bill.lastReading} to ${bill.currentReading} (${units.toFixed(1)} units)`,
-            `$${bill.electricityBillDue.toFixed(2)}`,
-            `$${bill.rentDue.toFixed(2)}`,
-            `$${bill.totalDue.toFixed(2)}`,
-            `$${bill.amountPaid.toFixed(2)}`,
-            { content: `$${bill.balance.toFixed(2)}`, style: { textColor: bill.balance > 0 ? [239, 68, 68] : [15, 23, 42], fontStyle: bill.balance > 0 ? 'bold' : 'normal' } }
+            `Rs. ${bill.electricityBillDue.toFixed(2)}`,
+            `Rs. ${bill.rentDue.toFixed(2)}`,
+            `Rs. ${bill.totalDue.toFixed(2)}`,
+            `Rs. ${bill.amountPaid.toFixed(2)}`,
+            { content: `Rs. ${bill.balance.toFixed(2)}`, style: { textColor: bill.balance > 0 ? [239, 68, 68] : [15, 23, 42], fontStyle: bill.balance > 0 ? 'bold' : 'normal' } }
           ];
         })
       : [];

@@ -129,7 +129,7 @@ const RenterForm = ({ renter, onClose, onRenterSaved, backendUrl }) => {
 
           <div className="form-row">
             <div className="form-group">
-              <label className="form-label" htmlFor="baseRent">Monthly Base Rent ($)</label>
+              <label className="form-label" htmlFor="baseRent">Monthly Base Rent (₹)</label>
               <div style={{ position: 'relative' }}>
                 <DollarSign size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
                 <input
@@ -147,7 +147,7 @@ const RenterForm = ({ renter, onClose, onRenterSaved, backendUrl }) => {
             </div>
 
             <div className="form-group">
-              <label className="form-label" htmlFor="electricityRate">Electricity Rate ($ / Unit)</label>
+              <label className="form-label" htmlFor="electricityRate">Electricity Rate (₹ / Unit)</label>
               <div style={{ position: 'relative' }}>
                 <Zap size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
                 <input
