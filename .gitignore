@@ -44,3 +44,9 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# Vercel
+.vercel
+backend/.vercel
+frontend/.vercel
+

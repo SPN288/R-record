@@ -9,7 +9,7 @@ import BillForm from './components/BillForm';
 import RenterHistory from './components/RenterHistory';
 import { generatePDFReport } from './utils/pdfGenerator';
 
-const BACKEND_URL = 'http://localhost:5000';
+const BACKEND_URL = 'https://r-record.vercel.app';
 
 function App() {
   const [renters, setRenters] = useState([]);
